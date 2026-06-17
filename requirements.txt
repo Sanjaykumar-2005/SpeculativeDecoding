@@ -1,0 +1,30 @@
+# ---------------------------------------------------------------------------
+# Speculative Decoding POC - Python dependencies
+# ---------------------------------------------------------------------------
+# IMPORTANT: PyTorch with CUDA must be installed SEPARATELY (see README.md),
+# because the correct wheel depends on your CUDA version. Do NOT rely on the
+# plain `torch` line below if you want GPU support — install from the CUDA
+# index URL first, then run `pip install -r requirements.txt`.
+# ---------------------------------------------------------------------------
+
+# Core deep-learning / model libraries
+transformers==4.46.3        # HuggingFace models + DynamicCache (needs >=4.44 for .crop)
+accelerate==1.1.1           # device placement helpers used by from_pretrained
+safetensors==0.4.5          # fast/secure weight loading
+tokenizers>=0.20,<0.21      # pulled in by transformers, pinned for stability
+
+# 4-bit / 8-bit quantization so the 1.5B target fits in 4 GB VRAM.
+# bitsandbytes >=0.43 ships Windows wheels. If install fails on Windows,
+# set TARGET_4BIT = False in src/config.py and run models one at a time.
+bitsandbytes==0.44.1
+
+# Utilities
+sentencepiece==0.2.0        # tokenizer backend some Qwen variants need
+tabulate==0.9.0             # pretty markdown tables in the benchmark output
+numpy>=1.26,<2.1            # numerics; <2.1 keeps torch/transformers happy
+
+# Web UI (streamlit run app.py). Pulls in pandas, used for the results tables.
+streamlit>=1.36,<2.0
+
+# NOTE: torch is intentionally NOT pinned here. Install it first, e.g.:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
